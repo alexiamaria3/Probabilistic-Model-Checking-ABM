@@ -1,0 +1,94 @@
+dtmc
+
+module Time
+    t : [0..100] init 0;
+    r : [0..100] init 99;
+
+    // Increase time; drop reliability at t=5
+    [tick] t < 100 -> (t'=t+1) & (r'=(t=5 ? 48 : r));
+endmodule
+
+// Thresholds
+const int th0 = 65;
+const int th1 = 70;
+const int th2 = 60;
+const int delta = 10;
+const int threshold = 1;
+
+// Types: only Agent2 is a debunker
+const int type0 = 0;
+const int type1 = 0;
+const int type2 = 1;
+
+// Spread states: 1=spontaneous, 2=influenced, 3=persuaded
+// 4=stifler, 5=debunker
+const double pd  = 0.2;
+const double pd2 = 0.6;
+const double pp  = 0.7;
+
+// Decay after timeout
+formula decay_timeout = t >= 10;
+
+// Agent 0
+module Agent0
+    s0 : [0..5] init (type0=1 ? 5 : 0);
+
+    // Spontaneous
+    [] s0=0 & !enough_infl0 & r >= th0 -> (s0'=1);
+
+    // Influenced
+    [] s0=0 & enough_infl0 & r >= th0 - delta -> (s0'=2);
+    // Persuasion
+    [] s0=0 & is_spreading1 -> 0.7 : (s0'=3) + 0.3 : (s0'=0);
+
+    // Debunked
+    [] s0=1 & is_debunker1 -> pd2 : (s0'=4) + (1 - pd2) : (s0'=1);
+
+    // Decay
+    [] (s0=1 | s0=2 | s0=3) & !decay_timeout -> pd : (s0'=4) + (1 - pd) : (s0'=s0);
+    // Forced decay after timeout
+    [] (s0=1 | s0=2 | s0=3) & decay_timeout -> (s0'=4);
+endmodule
+
+// Agent 1
+module Agent1
+    s1 : [0..5] init (type1=1 ? 5 : 0);
+
+    [] s1=0 & !enough_infl1 & r >= th1 -> (s1'=1);
+    [] s1=0 & enough_infl1 & r >= th1 - delta -> (s1'=2);
+    [] s1=0 & is_spreading2 -> pp : (s1'=3) + (1 - pp) : (s1'=0);
+    [] s1=1 & is_debunker2 -> pd2 : (s1'=4) + (1 - pd2) : (s1'=1);
+    [] (s1=1 | s1=2 | s1=3) & !decay_timeout -> pd : (s1'=4) + (1 - pd) : (s1'=s1);
+    [] (s1=1 | s1=2 | s1=3) & decay_timeout -> (s1'=4);
+endmodule
+
+// Agent 2 (Debunker)
+module Agent2
+    s2 : [0..5] init (type2=1 ? 5 : 0);
+
+    [] s2=0 & !enough_infl2 & r >= th2 -> (s2'=1);
+    [] s2=0 & enough_infl2 & r >= th2 - delta -> (s2'=2);
+    [] s2=0 & is_spreading0 -> pp : (s2'=3) + (1 - pp) : (s2'=0);
+    [] (s2=1 | s2=2 | s2=3) & !decay_timeout -> pd : (s2'=4) + (1 - pd) : (s2'=s2);
+    [] (s2=1 | s2=2 | s2=3) & decay_timeout -> (s2'=4);
+endmodule
+
+// Neighbour checks
+formula is_spreading0 = s0=1 | s0=2 | s0=3;
+formula is_spreading1 = s1=1 | s1=2 | s1=3;
+formula is_spreading2 = s2=1 | s2=2 | s2=3;
+
+formula is_debunker1 = s1=5;
+formula is_debunker2 = s2=5;
+
+formula enough_infl0 = (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) >= threshold;
+formula enough_infl1 = (is_spreading0 ? 1 : 0) + (is_spreading2 ? 1 : 0) >= threshold;
+formula enough_infl2 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) >= threshold;
+
+// Labels
+label "all_done" = s0 >= 4 & s1 >= 4 & s2 >= 4;
+label "spontaneous" = s0=1 | s1=1 | s2=1;
+label "no_ignorants" = s0!=0 & s1!=0 & s2!=0;
+label "debunked" = s2=5 & (s0=0 | s1=0);
+label "persuaded" = s0=3 | s1=3 | s2=3;
+label "all_influenced" = s0=2 & s1=2 & s2=2;
