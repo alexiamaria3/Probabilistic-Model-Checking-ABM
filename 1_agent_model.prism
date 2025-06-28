@@ -1,0 +1,44 @@
+dtmc
+
+// Time module to manage reliability
+module Time
+  t : [0..100] init 0;
+  r : [0..100] init 99;
+  [tick] t < 100 -> 1.0 : (t'=t+1) & (r' = (t=5 ? 48 : r));
+endmodule
+
+const int th0 = 65;
+const int type0 = 0;
+const double pd = 0.2;   // probability of becoming a stifler
+const double pp = 0.7;   // persuasion success (irrelevant here)
+const double pd2 = 0.6;  // debunking (not needed)
+const double delta = 10; // threshold change for influence
+
+// Only one agent: no neighbors => no influence, no persuasion
+formula is_spreading0 = (s0=1 | s0=2 | s0=3);
+formula is_debunker0 = (s0=5);
+formula enough_infl0 = false;
+
+module Agent0
+  s0 : [0..5] init 0;
+
+  // Spontaneous spreading
+  [] s0=0 & r >= th0 -> 0.3 : (s0'=1) + 0.7 : (s0'=0);
+  [] s0=0 & r < th0  -> (s0'=0);
+
+  // No influence or persuasion because no neighbors
+
+  // Becoming a stifler
+  [] s0=1 | s0=2 | s0=3 -> pd : (s0'=4) + (1 - pd) : (s0'=s0);
+endmodule
+
+label "all_done" = s0>=4;
+label "spontaneous" = s0=1;
+label "no_ignorants" = s0!=0;
+label "debunked" = false;
+label "persuaded" = s0=3;
+label "all_influenced" = s0=2;
+
+rewards "steps"
+  true : 1;
+endrewards
