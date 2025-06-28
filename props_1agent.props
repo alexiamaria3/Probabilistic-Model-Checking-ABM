@@ -1,0 +1,23 @@
+P=? [ F (s0>=4) ]
+
+P=? [ F "all_influenced" ]
+
+P=? [ F "no_ignorants" ]
+
+P=? [ F "spontaneous" ]
+
+P=? [ F "persuaded" ]
+
+P=? [ F "debunked" ]
+
+P=? [ F ("spontaneous"|"persuaded"|"all_influenced") ]
+
+P=? [ F<=10 "no_ignorants" ]
+
+P=? [ F<=15 (s0>=4) ]
+
+P=? [ F<=5 "debunked" ]
+
+P<1 [ F true ]
+
+filter(count, true)
