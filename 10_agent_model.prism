@@ -1,0 +1,178 @@
+dtmc
+
+
+// Time module to manage reliability drop
+
+module Time
+  t : [0..100] init 0;
+  r : [0..100] init 99;
+  [tick] t < 100 -> 1.0 : (t'=t+1) & (r' = (t=5 ? 48 : r));
+endmodule
+
+// Agent thresholds and types
+const int th0 = 65;
+const int type0 = 0;
+const int th1 = 70;
+const int type1 = 0;
+const int th2 = 60;
+const int type2 = 1;
+const int th3 = 75;
+const int type3 = 0;
+const int th4 = 68;
+const int type4 = 0;
+const int th5 = 66;
+const int type5 = 1;
+const int th6 = 62;
+const int type6 = 0;
+const int th7 = 73;
+const int type7 = 0;
+const int th8 = 69;
+const int type8 = 0;
+const int th9 = 67;
+const int type9 = 1;
+
+// Spreading and debunker formulas
+formula is_spreading0 = (s0=1 | s0=2 | s0=3);
+formula is_debunker0 = (s0=5);
+formula is_spreading1 = (s1=1 | s1=2 | s1=3);
+formula is_debunker1 = (s1=5);
+formula is_spreading2 = (s2=1 | s2=2 | s2=3);
+formula is_debunker2 = (s2=5);
+formula is_spreading3 = (s3=1 | s3=2 | s3=3);
+formula is_debunker3 = (s3=5);
+formula is_spreading4 = (s4=1 | s4=2 | s4=3);
+formula is_debunker4 = (s4=5);
+formula is_spreading5 = (s5=1 | s5=2 | s5=3);
+formula is_debunker5 = (s5=5);
+formula is_spreading6 = (s6=1 | s6=2 | s6=3);
+formula is_debunker6 = (s6=5);
+formula is_spreading7 = (s7=1 | s7=2 | s7=3);
+formula is_debunker7 = (s7=5);
+formula is_spreading8 = (s8=1 | s8=2 | s8=3);
+formula is_debunker8 = (s8=5);
+formula is_spreading9 = (s9=1 | s9=2 | s9=3);
+formula is_debunker9 = (s9=5);
+
+// Influence formulas
+formula enough_infl0 = (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading8 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl1 = (is_spreading0 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading8 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl2 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading8 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl3 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading8 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl4 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading8 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl5 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading8 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl6 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading8 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl7 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading8 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl8 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading9 ? 1 : 0) >= 1;
+formula enough_infl9 = (is_spreading0 ? 1 : 0) + (is_spreading1 ? 1 : 0) + (is_spreading2 ? 1 : 0) + (is_spreading3 ? 1 : 0) + (is_spreading4 ? 1 : 0) + (is_spreading5 ? 1 : 0) + (is_spreading6 ? 1 : 0) + (is_spreading7 ? 1 : 0) + (is_spreading8 ? 1 : 0) >= 1;
+
+module Agent0
+  s0 : [0..5] init 0;
+  [] s0=0 & r >= th0 -> 0.3 : (s0'=1) + 0.7 : (s0'=0);
+  [] s0=0 & enough_infl0 -> 0.8 : (s0'=2) + 0.2 : (s0'=0);
+  [] s0=0 & is_spreading1 -> 0.7 : (s0'=3) + 0.3 : (s0'=0);
+  [] s0=2 & s2=5 -> 0.6 : (s0'=0) + 0.4 : (s0'=2);
+  [] s0=2 & s5=5 -> 0.6 : (s0'=0) + 0.4 : (s0'=2);
+  [] s0=2 & s9=5 -> 0.6 : (s0'=0) + 0.4 : (s0'=2);
+  [] s0=1 | s0=2 | s0=3 -> 0.2 : (s0'=4) + 0.8 : (s0'=s0);
+endmodule
+
+module Agent1
+  s1 : [0..5] init 0;
+  [] s1=0 & r >= th1 -> 0.3 : (s1'=1) + 0.7 : (s1'=0);
+  [] s1=0 & enough_infl1 -> 0.8 : (s1'=2) + 0.2 : (s1'=0);
+  [] s1=0 & is_spreading2 -> 0.7 : (s1'=3) + 0.3 : (s1'=0);
+  [] s1=2 & s2=5 -> 0.6 : (s1'=0) + 0.4 : (s1'=2);
+  [] s1=2 & s5=5 -> 0.6 : (s1'=0) + 0.4 : (s1'=2);
+  [] s1=2 & s9=5 -> 0.6 : (s1'=0) + 0.4 : (s1'=2);
+  [] s1=1 | s1=2 | s1=3 -> 0.2 : (s1'=4) + 0.8 : (s1'=s1);
+endmodule
+
+module Agent2
+  s2 : [0..5] init 0;
+  [] s2=0 & r >= th2 -> 0.3 : (s2'=1) + 0.7 : (s2'=0);
+  [] s2=0 & enough_infl2 -> 0.8 : (s2'=2) + 0.2 : (s2'=0);
+  [] s2=0 & is_spreading3 -> 0.7 : (s2'=3) + 0.3 : (s2'=0);
+  [] s2=1 | s2=2 | s2=3 -> 0.2 : (s2'=4) + 0.8 : (s2'=s2);
+endmodule
+
+module Agent3
+  s3 : [0..5] init 0;
+  [] s3=0 & r >= th3 -> 0.3 : (s3'=1) + 0.7 : (s3'=0);
+  [] s3=0 & enough_infl3 -> 0.8 : (s3'=2) + 0.2 : (s3'=0);
+  [] s3=0 & is_spreading4 -> 0.7 : (s3'=3) + 0.3 : (s3'=0);
+  [] s3=2 & s2=5 -> 0.6 : (s3'=0) + 0.4 : (s3'=2);
+  [] s3=2 & s5=5 -> 0.6 : (s3'=0) + 0.4 : (s3'=2);
+  [] s3=2 & s9=5 -> 0.6 : (s3'=0) + 0.4 : (s3'=2);
+  [] s3=1 | s3=2 | s3=3 -> 0.2 : (s3'=4) + 0.8 : (s3'=s3);
+endmodule
+
+module Agent4
+  s4 : [0..5] init 0;
+  [] s4=0 & r >= th4 -> 0.3 : (s4'=1) + 0.7 : (s4'=0);
+  [] s4=0 & enough_infl4 -> 0.8 : (s4'=2) + 0.2 : (s4'=0);
+  [] s4=0 & is_spreading5 -> 0.7 : (s4'=3) + 0.3 : (s4'=0);
+  [] s4=2 & s2=5 -> 0.6 : (s4'=0) + 0.4 : (s4'=2);
+  [] s4=2 & s5=5 -> 0.6 : (s4'=0) + 0.4 : (s4'=2);
+  [] s4=2 & s9=5 -> 0.6 : (s4'=0) + 0.4 : (s4'=2);
+  [] s4=1 | s4=2 | s4=3 -> 0.2 : (s4'=4) + 0.8 : (s4'=s4);
+endmodule
+
+module Agent5
+  s5 : [0..5] init 0;
+  [] s5=0 & r >= th5 -> 0.3 : (s5'=1) + 0.7 : (s5'=0);
+  [] s5=0 & enough_infl5 -> 0.8 : (s5'=2) + 0.2 : (s5'=0);
+  [] s5=0 & is_spreading6 -> 0.7 : (s5'=3) + 0.3 : (s5'=0);
+  [] s5=1 | s5=2 | s5=3 -> 0.2 : (s5'=4) + 0.8 : (s5'=s5);
+endmodule
+
+module Agent6
+  s6 : [0..5] init 0;
+  [] s6=0 & r >= th6 -> 0.3 : (s6'=1) + 0.7 : (s6'=0);
+  [] s6=0 & enough_infl6 -> 0.8 : (s6'=2) + 0.2 : (s6'=0);
+  [] s6=0 & is_spreading7 -> 0.7 : (s6'=3) + 0.3 : (s6'=0);
+  [] s6=2 & s2=5 -> 0.6 : (s6'=0) + 0.4 : (s6'=2);
+  [] s6=2 & s5=5 -> 0.6 : (s6'=0) + 0.4 : (s6'=2);
+  [] s6=2 & s9=5 -> 0.6 : (s6'=0) + 0.4 : (s6'=2);
+  [] s6=1 | s6=2 | s6=3 -> 0.2 : (s6'=4) + 0.8 : (s6'=s6);
+endmodule
+
+module Agent7
+  s7 : [0..5] init 0;
+  [] s7=0 & r >= th7 -> 0.3 : (s7'=1) + 0.7 : (s7'=0);
+  [] s7=0 & enough_infl7 -> 0.8 : (s7'=2) + 0.2 : (s7'=0);
+  [] s7=0 & is_spreading8 -> 0.7 : (s7'=3) + 0.3 : (s7'=0);
+  [] s7=2 & s2=5 -> 0.6 : (s7'=0) + 0.4 : (s7'=2);
+  [] s7=2 & s5=5 -> 0.6 : (s7'=0) + 0.4 : (s7'=2);
+  [] s7=2 & s9=5 -> 0.6 : (s7'=0) + 0.4 : (s7'=2);
+  [] s7=1 | s7=2 | s7=3 -> 0.2 : (s7'=4) + 0.8 : (s7'=s7);
+endmodule
+
+module Agent8
+  s8 : [0..5] init 0;
+  [] s8=0 & r >= th8 -> 0.3 : (s8'=1) + 0.7 : (s8'=0);
+  [] s8=0 & enough_infl8 -> 0.8 : (s8'=2) + 0.2 : (s8'=0);
+  [] s8=0 & is_spreading9 -> 0.7 : (s8'=3) + 0.3 : (s8'=0);
+  [] s8=2 & s2=5 -> 0.6 : (s8'=0) + 0.4 : (s8'=2);
+  [] s8=2 & s5=5 -> 0.6 : (s8'=0) + 0.4 : (s8'=2);
+  [] s8=2 & s9=5 -> 0.6 : (s8'=0) + 0.4 : (s8'=2);
+  [] s8=1 | s8=2 | s8=3 -> 0.2 : (s8'=4) + 0.8 : (s8'=s8);
+endmodule
+
+module Agent9
+  s9 : [0..5] init 0;
+  [] s9=0 & r >= th9 -> 0.3 : (s9'=1) + 0.7 : (s9'=0);
+  [] s9=0 & enough_infl9 -> 0.8 : (s9'=2) + 0.2 : (s9'=0);
+  [] s9=0 & is_spreading0 -> 0.7 : (s9'=3) + 0.3 : (s9'=0);
+  [] s9=1 | s9=2 | s9=3 -> 0.2 : (s9'=4) + 0.8 : (s9'=s9);
+endmodule
+
+// Labels
+label "all_done" = s0>=4 & s1>=4 & s2>=4 & s3>=4 & s4>=4 & s5>=4 & s6>=4 & s7>=4 & s8>=4 & s9>=4;
+label "spontaneous" = s0=1 | s1=1 | s2=1 | s3=1 | s4=1 | s5=1 | s6=1 | s7=1 | s8=1 | s9=1;
+label "no_ignorants" = s0!=0 & s1!=0 & s2!=0 & s3!=0 & s4!=0 & s5!=0 & s6!=0 & s7!=0 & s8!=0 & s9!=0;
+label "debunked" = (s0=0) | (s1=0) | (s3=0) | (s4=0) | (s6=0) | (s7=0) | (s8=0);
+label "persuaded" = s0=3 | s1=3 | s2=3 | s3=3 | s4=3 | s5=3 | s6=3 | s7=3 | s8=3 | s9=3;
+label "all_influenced" = s0=2 & s1=2 & s2=2 & s3=2 & s4=2 & s5=2 & s6=2 & s7=2 & s8=2 & s9=2;
+rewards "steps"
+  true : 1;
+endrewards
